@@ -216,6 +216,19 @@ public class EmpleadoComercialController {
         }
     }
 
+    @PutMapping(value = "cliente/editar/{id}", headers = "Accept=application/json")
+    @ResponseBody
+    public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody EmpleadoComercialDTO datos) {
+        if (service.existeEmpleadoComercial(id)) {
+            service.modificarEmpleadoComercial(datos, id);
+            String mensaje = "Se modificó el cliente con el ID: " + id;
+            return ResponseEntity.ok(mensaje);
+        } else {
+            String mensaje = "No se encontró el cliente con el ID: " + id;
+            return ResponseEntity.status(404).body(mensaje);
+        }
+    }
+
     // ******************************
     // Servicios Routes
     // ******************************

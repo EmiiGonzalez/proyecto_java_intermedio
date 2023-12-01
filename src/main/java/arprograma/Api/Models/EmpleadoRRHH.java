@@ -3,7 +3,6 @@ package arprograma.Api.Models;
 import java.util.ArrayList;
 import java.util.List;
 
-import arprograma.Api.Models.exeptions.TecnicoExistenteExeption;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,40 +42,4 @@ public class EmpleadoRRHH {
         this.tecnicosRegistrados = tecnicosRegistrados;
         this.empleado = empleado;
     }
-
-    public Tecnico registrarTecnico(Empleado empleado) {
-        tecnicosRegistrados.forEach(t -> {
-            try {
-                if (t.getEmpleado().getId_empleado() == empleado.getId_empleado()) {
-                    throw new TecnicoExistenteExeption("El tecnico ya se encuentra registrado");
-                }
-            } catch (TecnicoExistenteExeption e) {
-                e.printStackTrace();
-            }
-        });
-
-        Tecnico tecnico = new Tecnico(empleado, this);
-        this.tecnicosRegistrados.add(tecnico);
-
-        return tecnico;
-    }
-
-    public boolean borrarTecnico(Tecnico tecnico) {
-        return this.tecnicosRegistrados.remove(tecnico);
-    }
-
-    public boolean borrarTecnico(Long id_tecnico) {
-        return this.tecnicosRegistrados.removeIf(t -> t.getId_tecnico() == id_tecnico);
-    }
-
-    public boolean modificarTecnico(Tecnico tecnico) {
-        if (this.tecnicosRegistrados.contains(tecnico)) {
-            this.tecnicosRegistrados.remove(tecnico);
-            this.tecnicosRegistrados.add(tecnico);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 }
