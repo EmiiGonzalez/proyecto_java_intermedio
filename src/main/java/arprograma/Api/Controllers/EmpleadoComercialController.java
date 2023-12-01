@@ -1,6 +1,7 @@
 package arprograma.Api.Controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -90,16 +91,18 @@ public class EmpleadoComercialController {
 
     @PutMapping(value = "/editar/{id}", headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody EmpleadoComercial datos) {
+    public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody EmpleadoComercialDTO datos) {
         if (service.existeEmpleadoComercial(id)) {
-            service.modificarEmpleadoComercial(datos, id);
+            Empleado empleado = empleadoService.buscarEmpleado(datos.getId_empleado()).get();
+
+            service.modificarEmpleadoComercial(empleado, id);
             String mensaje = "Se modificó el comercial con el ID: " + id;
+
             return ResponseEntity.ok(mensaje);
         } else {
             String mensaje = "No se encontró el comercial con el ID: " + id;
             return ResponseEntity.status(404).body(mensaje);
         }
-
     }
 
     // ******************************
@@ -218,9 +221,9 @@ public class EmpleadoComercialController {
 
     @PutMapping(value = "cliente/editar/{id}", headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody EmpleadoComercialDTO datos) {
-        if (service.existeEmpleadoComercial(id)) {
-            service.modificarEmpleadoComercial(datos, id);
+    public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody ClienteDTO datos) {
+        if (service.existeCliente(id)) {
+            service.modificarCliente(datos, id);
             String mensaje = "Se modificó el cliente con el ID: " + id;
             return ResponseEntity.ok(mensaje);
         } else {

@@ -1,10 +1,12 @@
 package arprograma.Api.Services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import arprograma.Api.DTO.ClienteDTO;
+import arprograma.Api.DTO.EmpleadoComercialDTO;
 import arprograma.Api.DTO.ServicioDTO;
 import arprograma.Api.Models.Cliente;
 import arprograma.Api.Models.Empleado;
@@ -32,10 +34,11 @@ public class EmpleadoComercialService {
         this.empleadoComercialRepository.deleteById(id);
     }
 
-    public void modificarEmpleadoComercial(EmpleadoComercial empleadoComercial, Long id) {
+    public void modificarEmpleadoComercial(Empleado empleado, Long id) {
         EmpleadoComercial old = this.empleadoComercialRepository.findById(id).get();
-        old.setEmpleado(empleadoComercial.getEmpleado());
-        old.setClientesRegistrados(empleadoComercial.getClientesRegistrados());
+        
+        old.setEmpleado(empleado);
+
         this.empleadoComercialRepository.save(old);
     }
 
@@ -100,16 +103,16 @@ public class EmpleadoComercialService {
         this.clienteService.borrar(cliente);
     }
 
-    public void modificarCliente(Cliente cliente, Long id) {
+    public void modificarCliente(ClienteDTO cliente, Long id) {
         Cliente old = this.clienteService.buscar(id).get();
+        EmpleadoComercial emCom = this.empleadoComercialRepository.findById(cliente.getRegistradoPor()).get();
         
         old.setRazonSocial(cliente.getRazonSocial());
         old.setCuil(cliente.getCuil());
         old.setDni(cliente.getDni());
         old.setEmail(cliente.getEmail());
         old.setTelefono(cliente.getTelefono());
-        old.setServiciosContratados(cliente.getServiciosContratados());
-        old.setEmCom(cliente.getEmCom());
+        old.setEmCom(emCom);
 
         this.clienteService.modificar(old);
     }
@@ -125,19 +128,19 @@ public class EmpleadoComercialService {
         return this.clienteService.clienteExistente(datos);
     }
 
-    public Object buscarCliente(Long id) {
+    public Optional<Cliente> buscarCliente(Long id) {
         return this.clienteService.buscar(id);
     }
 
-    public Object buscarClienteDni(String dni) {
+    public Optional<Cliente> buscarClienteDni(String dni) {
         return this.clienteService.buscarDni(dni);
     }
 
-    public Object buscarClienteCuil(String cuil) {
+    public Optional<Cliente> buscarClienteCuil(String cuil) {
         return this.clienteService.buscarCuil(cuil);
     }
 
-    public Object buscarClienteRazonSocial(String razonSocial) {
+    public Optional<Cliente> buscarClienteRazonSocial(String razonSocial) {
         return this.clienteService.buscarRazonSocial(razonSocial);
     }
 
