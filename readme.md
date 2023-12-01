@@ -23,6 +23,7 @@ Este repositorio contiene una API para gestionar empleados.
     "telefono": "1234567890"
 }
 
+```
 
 # API de Empleados Comerciales
 
